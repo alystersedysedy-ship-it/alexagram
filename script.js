@@ -51,8 +51,9 @@ if (audioToggleBtn && siteAudio) {
 
   function removeAudioInteractionListeners() {
     window.removeEventListener('pointerdown', handleFirstAudioInteraction);
+    window.removeEventListener('pointerup', handleFirstAudioInteraction);
     window.removeEventListener('keydown', handleFirstAudioInteraction);
-    window.removeEventListener('touchstart', handleFirstAudioInteraction);
+    window.removeEventListener('touchend', handleFirstAudioInteraction);
     window.removeEventListener('click', handleFirstAudioInteraction);
   }
 
@@ -109,18 +110,15 @@ if (audioToggleBtn && siteAudio) {
 
   syncAudioButton();
   startAudioPlayback();
-  window.addEventListener('pointerdown', handleFirstAudioInteraction, {
+  window.addEventListener('pointerup', handleFirstAudioInteraction, {
     once: true,
   });
   window.addEventListener('keydown', handleFirstAudioInteraction, {
     once: true,
   });
-  window.addEventListener('touchstart', handleFirstAudioInteraction, {
+  window.addEventListener('touchend', handleFirstAudioInteraction, {
     once: true,
     passive: true,
-  });
-  window.addEventListener('click', handleFirstAudioInteraction, {
-    once: true,
   });
 }
 
