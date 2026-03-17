@@ -855,6 +855,7 @@ body.story-viewer-open {
 
 /* Side Menu */
 .side-menu {
+  display: none;
   max-width: 290px;
   position: fixed;
   left: 50%;
@@ -1182,9 +1183,5 @@ body.story-viewer-open {
 
   .content {
     margin: unset;
-  }
-
-  .side-menu {
-    display: flex;
   }
 }
