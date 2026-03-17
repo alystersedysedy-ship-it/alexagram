@@ -261,7 +261,7 @@ img {
 .stories {
   width: 100%;
   background-color: var(--primary);
-  padding: 48px 0 16px;
+  padding: 16px 0;
   flex-shrink: 0;
 
   position: relative;
@@ -293,16 +293,14 @@ img {
   background-color: var(--border);
 }
 .stories__prompt {
-  position: absolute;
-  top: 10px;
-  left: 12px;
-  right: 12px;
+  position: relative;
   z-index: 3;
   display: flex;
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
   pointer-events: none;
+  margin: 0 16px 12px;
 }
 .stories__prompt-badge {
   display: inline-flex;
@@ -1181,11 +1179,13 @@ body.story-viewer-open {
     padding: 16px 0;
   }
   .stories__prompt {
+    position: absolute;
     top: -14px;
     left: 12px;
     right: auto;
     gap: 8px;
     flex-wrap: nowrap;
+    margin: 0;
   }
   .stories__prompt-arrow {
     font-size: 11px;
