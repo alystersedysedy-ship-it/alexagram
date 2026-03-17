@@ -168,7 +168,7 @@ if (storyButtons.length > 0) {
       <button class="story-viewer__close" type="button" aria-label="Close story">&times;</button>
       <button class="story-viewer__nav story-viewer__nav--left" type="button" aria-label="Previous story image"></button>
       <button class="story-viewer__nav story-viewer__nav--right" type="button" aria-label="Next story image"></button>
-      <img class="story-viewer__image" src="img/icon.jpg" alt="Story image" />
+      <div class="story-viewer__image" role="img" aria-label="Story image"></div>
     </section>
   `;
   document.body.appendChild(storyViewer);
@@ -186,9 +186,15 @@ if (storyButtons.length > 0) {
   let activeStoryIndex = 0;
   let activeSlideIndex = 0;
   let storyTimeout = null;
+  let storyAdvanceStartedAt = 0;
+  let storyAdvanceRemaining = STORY_SLIDE_DURATION;
   let swipeStartX = null;
   let swipeStartY = null;
+  let swipeStartedAt = 0;
+  let suppressStoryTap = false;
   const STORY_SWIPE_THRESHOLD = 45;
+  const STORY_HOLD_THRESHOLD = 220;
+  const STORY_TAP_DRIFT_THRESHOLD = 12;
 
   function isStoryViewerOpen() {
     return storyViewer.classList.contains('is-open');
@@ -199,6 +205,22 @@ if (storyButtons.length > 0) {
       window.clearTimeout(storyTimeout);
       storyTimeout = null;
     }
+  }
+
+  function pauseStoryPlayback() {
+    if (!isStoryViewerOpen()) return;
+    if (storyTimeout !== null) {
+      const elapsed = Date.now() - storyAdvanceStartedAt;
+      storyAdvanceRemaining = Math.max(0, storyAdvanceRemaining - elapsed);
+    }
+    clearStoryTimeout();
+    storyViewer.classList.add('is-paused');
+  }
+
+  function resumeStoryPlayback() {
+    if (!isStoryViewerOpen()) return;
+    storyViewer.classList.remove('is-paused');
+    scheduleStoryAdvance(storyAdvanceRemaining);
   }
 
   function markStoryAsViewed(storyIndex) {
@@ -214,8 +236,8 @@ if (storyButtons.length > 0) {
     storyViewerUser.textContent = activeStory.storyName;
     storyViewerAvatar.src = activeStory.avatarSrc;
     storyViewerAvatar.alt = `${activeStory.storyName} avatar`;
-    storyViewerImage.src = activeImage;
-    storyViewerImage.alt = `${activeStory.storyName} story`;
+    storyViewerImage.style.backgroundImage = `url("${activeImage}")`;
+    storyViewerImage.setAttribute('aria-label', `${activeStory.storyName} story`);
 
     storyViewerProgress.innerHTML = activeStory.mediaSources
       .map((_, index) => {
@@ -227,11 +249,13 @@ if (storyButtons.length > 0) {
       .join('');
   }
 
-  function scheduleStoryAdvance() {
+  function scheduleStoryAdvance(duration = STORY_SLIDE_DURATION) {
     clearStoryTimeout();
+    storyAdvanceRemaining = duration;
+    storyAdvanceStartedAt = Date.now();
     storyTimeout = window.setTimeout(() => {
       openNextStorySlide();
-    }, STORY_SLIDE_DURATION);
+    }, duration);
   }
 
   function openStoryViewer(storyIndex, slideIndex = 0) {
@@ -244,6 +268,7 @@ if (storyButtons.length > 0) {
     markStoryAsViewed(activeStoryIndex);
 
     storyViewer.classList.add('is-open');
+    storyViewer.classList.remove('is-paused');
     storyViewer.setAttribute('aria-hidden', 'false');
     document.body.classList.add('story-viewer-open');
 
@@ -254,6 +279,7 @@ if (storyButtons.length > 0) {
   function closeStoryViewer() {
     clearStoryTimeout();
     storyViewer.classList.remove('is-open');
+    storyViewer.classList.remove('is-paused');
     storyViewer.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('story-viewer-open');
   }
@@ -308,51 +334,103 @@ if (storyButtons.length > 0) {
 
   storyViewerBackdrop.addEventListener('click', closeStoryViewer);
   storyViewerCloseButton.addEventListener('click', closeStoryViewer);
-  storyViewerNextButton.addEventListener('click', openNextStorySlide);
-  storyViewerPreviousButton.addEventListener('click', openPreviousStorySlide);
+  storyViewerNextButton.addEventListener('click', (event) => {
+    if (suppressStoryTap) {
+      event.preventDefault();
+      suppressStoryTap = false;
+      return;
+    }
+    openNextStorySlide();
+  });
+  storyViewerPreviousButton.addEventListener('click', (event) => {
+    if (suppressStoryTap) {
+      event.preventDefault();
+      suppressStoryTap = false;
+      return;
+    }
+    openPreviousStorySlide();
+  });
 
-  storyViewerPanel.addEventListener(
-    'touchstart',
-    (event) => {
-      const touch = event.touches[0];
-      if (!touch) return;
-      swipeStartX = touch.clientX;
-      swipeStartY = touch.clientY;
-      clearStoryTimeout();
-    },
-    { passive: true }
-  );
+  function handleStoryTouchStart(event) {
+    const touch = event.touches[0];
+    if (!touch) return;
+    event.preventDefault();
+    swipeStartX = touch.clientX;
+    swipeStartY = touch.clientY;
+    swipeStartedAt = Date.now();
+    suppressStoryTap = false;
+    pauseStoryPlayback();
+  }
 
-  storyViewerPanel.addEventListener(
-    'touchend',
-    (event) => {
-      const touch = event.changedTouches[0];
-      if (!touch || swipeStartX === null || swipeStartY === null) {
-        scheduleStoryAdvance();
-        swipeStartX = null;
-        swipeStartY = null;
-        return;
-      }
-
-      const deltaX = touch.clientX - swipeStartX;
-      const deltaY = touch.clientY - swipeStartY;
-      const isHorizontalSwipe = Math.abs(deltaX) > Math.abs(deltaY);
-
-      if (isHorizontalSwipe && Math.abs(deltaX) >= STORY_SWIPE_THRESHOLD) {
-        if (deltaX < 0) {
-          openNextStorySlide();
-        } else {
-          openPreviousStorySlide();
-        }
-      } else {
-        scheduleStoryAdvance();
-      }
-
+  function handleStoryTouchEnd(event) {
+    const touch = event.changedTouches[0];
+    if (!touch || swipeStartX === null || swipeStartY === null) {
+      resumeStoryPlayback();
       swipeStartX = null;
       swipeStartY = null;
-    },
-    { passive: true }
-  );
+      swipeStartedAt = 0;
+      return;
+    }
+
+    event.preventDefault();
+
+    const deltaX = touch.clientX - swipeStartX;
+    const deltaY = touch.clientY - swipeStartY;
+    const isHorizontalSwipe = Math.abs(deltaX) > Math.abs(deltaY);
+    const holdDuration = Date.now() - swipeStartedAt;
+    const isTapLike =
+      Math.abs(deltaX) <= STORY_TAP_DRIFT_THRESHOLD &&
+      Math.abs(deltaY) <= STORY_TAP_DRIFT_THRESHOLD;
+
+    if (isHorizontalSwipe && Math.abs(deltaX) >= STORY_SWIPE_THRESHOLD) {
+      if (deltaX < 0) {
+        openNextStorySlide();
+      } else {
+        openPreviousStorySlide();
+      }
+      suppressStoryTap = true;
+    } else if (holdDuration >= STORY_HOLD_THRESHOLD) {
+      resumeStoryPlayback();
+      suppressStoryTap = true;
+    } else if (isTapLike) {
+      const panelBounds = storyViewerPanel.getBoundingClientRect();
+      const tappedLeftSide =
+        touch.clientX < panelBounds.left + panelBounds.width / 2;
+
+      if (tappedLeftSide) {
+        openPreviousStorySlide();
+      } else {
+        openNextStorySlide();
+      }
+      suppressStoryTap = true;
+    } else {
+      resumeStoryPlayback();
+    }
+
+    swipeStartX = null;
+    swipeStartY = null;
+    swipeStartedAt = 0;
+  }
+
+  storyViewerPanel.addEventListener('touchstart', handleStoryTouchStart, {
+    passive: false,
+  });
+  storyViewerPanel.addEventListener('touchend', handleStoryTouchEnd, {
+    passive: false,
+  });
+  storyViewerPanel.addEventListener('mousedown', pauseStoryPlayback);
+  storyViewerPanel.addEventListener('mouseup', resumeStoryPlayback);
+  storyViewerPanel.addEventListener('mouseleave', resumeStoryPlayback);
+
+  storyViewer.addEventListener('contextmenu', (event) => {
+    if (!isStoryViewerOpen()) return;
+    event.preventDefault();
+  });
+
+  storyViewer.addEventListener('gesturestart', (event) => {
+    if (!isStoryViewerOpen()) return;
+    event.preventDefault();
+  });
 
   document.addEventListener('keydown', (event) => {
     if (!isStoryViewerOpen()) return;
@@ -374,9 +452,9 @@ if (storyButtons.length > 0) {
     if (!isStoryViewerOpen()) return;
 
     if (document.hidden) {
-      clearStoryTimeout();
+      pauseStoryPlayback();
     } else {
-      scheduleStoryAdvance();
+      resumeStoryPlayback();
     }
   });
 }
