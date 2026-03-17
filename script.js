@@ -7,7 +7,7 @@ const storyButtons = Array.from(document.querySelectorAll('.story'));
 const posts = document.querySelectorAll('.post');
 const postsContent = document.querySelectorAll('.post__content');
 const postActionState = JSON.parse(localStorage.getItem('postActionState') || '{}');
-const STORY_SLIDE_DURATION = 3200;
+const STORY_SLIDE_DURATION = 6000;
 
 const heartIconOutline = `
   <svg
