@@ -124,31 +124,56 @@ if (storyButtons.length > 0) {
     button.classList.toggle('story--has-story', !isStorySeen(storyIndex));
   }
 
-  const storyMediaPool = Array.from(document.querySelectorAll('.post__media'))
-    .map((media) => media.getAttribute('src'))
-    .filter(Boolean);
-
-  function getStoryImageFromPool(poolIndex, fallback) {
-    if (storyMediaPool.length === 0) return fallback;
-    return storyMediaPool[poolIndex % storyMediaPool.length];
-  }
+  const storyFolderMediaMap = {
+    AS: ['img/AS/AS 1.png', 'img/AS/AS 2.png', 'img/AS/AS 3.png'],
+    LONG: ['img/LONG/LONG 1.png', 'img/LONG/LONG 2.png', 'img/LONG/LONG 3.png'],
+    'AS 2': [
+      'img/AS 2/AS 2 1.png',
+      'img/AS 2/AS 2 2.png',
+      'img/AS 2/AS 2 3.png',
+    ],
+    I: ['img/I/i 1.png', 'img/I/i 2.png', 'img/I/i 3.png'],
+    EXIST: [
+      'img/EXIST/EXIST 1.png',
+      'img/EXIST/EXIST 2.png',
+      'img/EXIST/EXIST 3.png',
+    ],
+    "YOU'LL": [
+      "img/YOU'LL/YOU'LL 1.png",
+      "img/YOU'LL/YOU'LL 2.png",
+      "img/YOU'LL/YOU'LL 3.png",
+    ],
+    BE: ['img/BE/BE 1.png', 'img/BE/BE 2.png', 'img/BE/BE 3.png'],
+    LOVED: [
+      'img/LOVED/LOVED 1.png',
+      'img/LOVED/LOVED 2.png',
+      'img/LOVED/LOVED 3.png',
+    ],
+  };
 
   const storyDecks = storyButtons.map((storyButton, index) => {
     const storyName =
       storyButton.querySelector('.story__user')?.textContent?.trim() ||
       `story ${index + 1}`;
+    const storyFolder = storyButton.dataset.storyFolder;
+    const mediaSources =
+      storyFolderMediaMap[storyFolder]?.slice() ||
+      ['img/icon.jpg', 'img/icon.jpg', 'img/icon.jpg'];
     const avatarSrc =
+      mediaSources[0] ||
       storyButton.querySelector('.story__picture img')?.getAttribute('src') ||
       'img/icon.jpg';
+
+    const storyAvatar = storyButton.querySelector('.story__picture img');
+    if (storyAvatar) {
+      storyAvatar.src = avatarSrc;
+      storyAvatar.alt = `${storyName} story cover`;
+    }
 
     return {
       storyName,
       avatarSrc,
-      mediaSources: [
-        avatarSrc,
-        getStoryImageFromPool(index, avatarSrc),
-        getStoryImageFromPool(index + 1, avatarSrc),
-      ],
+      mediaSources,
     };
   });
 

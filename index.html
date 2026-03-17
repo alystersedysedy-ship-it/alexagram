@@ -5,8 +5,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="assets/favicon.svg" type="image/x-icon" />
-    <link rel="stylesheet" type="text/css" href="style.css" />
-    <script src="script.js" defer></script>
+    <link rel="stylesheet" type="text/css" href="style.css?v=2" />
+    <script src="script.js?v=2" defer></script>
   </head>
 
   <body>
@@ -268,7 +268,7 @@
               </svg>
             </button>
             <div class="stories__content">
-              <button class="story story--has-story">
+              <button class="story story--has-story" data-story-folder="AS">
                 <div class="story__avatar">
                   <div class="story__border">
                     <svg
@@ -300,7 +300,7 @@
                 </div>
                 <span class="story__user">as</span>
               </button>
-              <button class="story story--has-story">
+              <button class="story story--has-story" data-story-folder="LONG">
                 <div class="story__avatar">
                   <div class="story__border">
                     <svg
@@ -317,7 +317,7 @@
                 </div>
                 <span class="story__user">long</span>
               </button>
-              <button class="story story--has-story">
+              <button class="story story--has-story" data-story-folder="AS 2">
                 <div class="story__avatar">
                   <div class="story__border">
                     <svg
@@ -334,7 +334,7 @@
                 </div>
                 <span class="story__user">as</span>
               </button>
-              <button class="story">
+              <button class="story" data-story-folder="I">
                 <div class="story__avatar">
                   <div class="story__border">
                     <svg
@@ -351,7 +351,7 @@
                 </div>
                 <span class="story__user">i</span>
               </button>
-              <button class="story">
+              <button class="story" data-story-folder="EXIST">
                 <div class="story__avatar">
                   <div class="story__border">
                     <svg
@@ -368,7 +368,7 @@
                 </div>
                 <span class="story__user">exist</span>
               </button>
-              <button class="story">
+              <button class="story" data-story-folder="YOU'LL">
                 <div class="story__avatar">
                   <div class="story__border">
                     <svg
@@ -385,7 +385,7 @@
                 </div>
                 <span class="story__user">you'll</span>
               </button>
-              <button class="story">
+              <button class="story" data-story-folder="BE">
                 <div class="story__avatar">
                   <div class="story__border">
                     <svg
@@ -402,7 +402,7 @@
                 </div>
                 <span class="story__user">be</span>
               </button>
-              <button class="story">
+              <button class="story" data-story-folder="LOVED">
                 <div class="story__avatar">
                   <div class="story__border">
                     <svg
@@ -872,7 +872,10 @@
                 </a>
                 <div class="side-menu__suggestion-info">
                   <a href="#">your existence</a>
-                  <span>my life is better, softer, and brighter with you in it</span>
+                  <span
+                    >my life is better, softer, and brighter with you in
+                    it</span
+                  >
                 </div>
                 <button class="side-menu__suggestion-button">Always</button>
               </div>
