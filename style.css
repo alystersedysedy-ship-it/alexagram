@@ -278,7 +278,6 @@ img {
 }
 .stories__prompt {
   position: relative;
-  z-index: 3;
   display: flex;
   align-items: center;
   gap: 8px;
