@@ -1135,27 +1135,6 @@ body.story-viewer-open {
     gap: 24px;
   }
 
-  .stories {
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 16px 0;
-  }
-  .stories__prompt {
-    position: absolute;
-    top: -14px;
-    left: 12px;
-    right: auto;
-    gap: 8px;
-    flex-wrap: nowrap;
-    margin: 0;
-  }
-  .stories__prompt-text {
-    font-size: 11px;
-  }
-  .stories::after {
-    content: none;
-  }
-
   .posts {
     gap: 24px;
   }
