@@ -75,6 +75,13 @@ toggleThemeBtn.addEventListener('click', () => {
 if (audioToggleBtn && siteAudio) {
   let audioReady = true;
 
+  function removeAudioInteractionListeners() {
+    window.removeEventListener('pointerdown', handleFirstAudioInteraction);
+    window.removeEventListener('keydown', handleFirstAudioInteraction);
+    window.removeEventListener('touchstart', handleFirstAudioInteraction);
+    window.removeEventListener('click', handleFirstAudioInteraction);
+  }
+
   function syncAudioButton() {
     const isPlaying = !siteAudio.paused && !siteAudio.ended;
     audioToggleBtn.classList.toggle('is-playing', isPlaying);
@@ -101,8 +108,7 @@ if (audioToggleBtn && siteAudio) {
   function handleFirstAudioInteraction() {
     if (!siteAudio.paused) return;
     startAudioPlayback();
-    window.removeEventListener('pointerdown', handleFirstAudioInteraction);
-    window.removeEventListener('keydown', handleFirstAudioInteraction);
+    removeAudioInteractionListeners();
   }
 
   siteAudio.volume = 0.45;
@@ -133,6 +139,13 @@ if (audioToggleBtn && siteAudio) {
     once: true,
   });
   window.addEventListener('keydown', handleFirstAudioInteraction, {
+    once: true,
+  });
+  window.addEventListener('touchstart', handleFirstAudioInteraction, {
+    once: true,
+    passive: true,
+  });
+  window.addEventListener('click', handleFirstAudioInteraction, {
     once: true,
   });
 }
