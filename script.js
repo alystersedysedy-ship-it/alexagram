@@ -179,7 +179,7 @@ if (storyButtons.length > 0) {
   }
 
   const storyFolderMediaMap = {
-    AS: ['img/AS/AS 1.png', 'img/AS/AS 2.png', 'img/AS/AS 3.png'],
+    AS: ['img/AS/AS 1.webp', 'img/AS/AS 2.webp', 'img/AS/AS 3.webp'],
     LONG: ['img/LONG/LONG 1.png', 'img/LONG/LONG 2.png', 'img/LONG/LONG 3.png'],
     'AS 2': [
       'img/AS 2/AS 2 1.png',
