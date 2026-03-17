@@ -14,7 +14,7 @@ window.addEventListener('load', () => {
   window.setTimeout(() => {
     document.body.classList.add('page-ready');
     document.body.classList.remove('page-loading');
-  }, 1500);
+  }, 850);
 });
 
 const heartIconOutline = `
