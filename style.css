@@ -56,14 +56,18 @@ body {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+}
+
+body > :not(.page-loader) {
   opacity: 1;
   transition: opacity 420ms ease, transform 420ms ease;
   transform: translateY(0);
 }
 
-body.page-loading {
+body.page-loading > :not(.page-loader) {
   opacity: 0;
   transform: translateY(6px);
+  pointer-events: none;
 }
 
 .page-loader {
