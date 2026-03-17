@@ -56,6 +56,43 @@
               />
             </svg>
           </button>
+          <button
+            class="header__audio-button"
+            type="button"
+            aria-label="Play background music"
+            title="Play background music"
+          >
+            <svg
+              class="header__audio-button-play"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <path
+                d="M8 6.5V17.5C8 18.2909 8.87531 18.7684 9.54076 18.3407L17.8194 13.3407C18.4554 12.9565 18.4554 12.0435 17.8194 11.6593L9.54076 6.65926C8.87531 6.23162 8 6.70906 8 7.5Z"
+                fill="var(--text-dark)"
+              />
+            </svg>
+            <svg
+              class="header__audio-button-pause"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <path
+                d="M8 6.5C8 5.94772 8.44772 5.5 9 5.5H10C10.5523 5.5 11 5.94772 11 6.5V17.5C11 18.0523 10.5523 18.5 10 18.5H9C8.44772 18.5 8 18.0523 8 17.5V6.5Z"
+                fill="var(--text-dark)"
+              />
+              <path
+                d="M13 6.5C13 5.94772 13.4477 5.5 14 5.5H15C15.5523 5.5 16 5.94772 16 6.5V17.5C16 18.0523 15.5523 18.5 15 18.5H14C13.4477 18.5 13 18.0523 13 17.5V6.5Z"
+                fill="var(--text-dark)"
+              />
+            </svg>
+          </button>
         </div>
 
         <div class="header__search">
@@ -1037,5 +1074,11 @@
         </div>
       </button>
     </nav>
+    <audio
+      class="site-audio"
+      src="audio/DANIEL - 은방울 (Lily of the Valley).mp3"
+      preload="auto"
+      loop
+    ></audio>
   </body>
 </html>

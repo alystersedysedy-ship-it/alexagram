@@ -1,5 +1,7 @@
 // Elements
 const toggleThemeBtn = document.querySelector('.header__theme-button');
+const audioToggleBtn = document.querySelector('.header__audio-button');
+const siteAudio = document.querySelector('.site-audio');
 const storiesContent = document.querySelector('.stories__content');
 const storiesLeftButton = document.querySelector('.stories__left-button');
 const storiesRightButton = document.querySelector('.stories__right-button');
@@ -67,6 +69,73 @@ toggleThemeBtn.addEventListener('click', () => {
     localStorage.setItem('theme', 'light');
   }
 });
+
+// ===================================
+// SITE AUDIO
+if (audioToggleBtn && siteAudio) {
+  let audioReady = true;
+
+  function syncAudioButton() {
+    const isPlaying = !siteAudio.paused && !siteAudio.ended;
+    audioToggleBtn.classList.toggle('is-playing', isPlaying);
+    audioToggleBtn.setAttribute(
+      'aria-label',
+      isPlaying ? 'Pause background music' : 'Play background music'
+    );
+    audioToggleBtn.title = isPlaying
+      ? 'Pause background music'
+      : 'Play background music';
+  }
+
+  async function startAudioPlayback() {
+    if (!audioReady) return;
+
+    try {
+      await siteAudio.play();
+      syncAudioButton();
+    } catch (error) {
+      syncAudioButton();
+    }
+  }
+
+  function handleFirstAudioInteraction() {
+    if (!siteAudio.paused) return;
+    startAudioPlayback();
+    window.removeEventListener('pointerdown', handleFirstAudioInteraction);
+    window.removeEventListener('keydown', handleFirstAudioInteraction);
+  }
+
+  siteAudio.volume = 0.45;
+
+  audioToggleBtn.addEventListener('click', async () => {
+    if (!audioReady) return;
+
+    if (siteAudio.paused) {
+      await startAudioPlayback();
+      return;
+    }
+
+    siteAudio.pause();
+    syncAudioButton();
+  });
+
+  siteAudio.addEventListener('play', syncAudioButton);
+  siteAudio.addEventListener('pause', syncAudioButton);
+  siteAudio.addEventListener('ended', syncAudioButton);
+  siteAudio.addEventListener('error', () => {
+    audioReady = false;
+    audioToggleBtn.classList.add('is-hidden');
+  });
+
+  syncAudioButton();
+  startAudioPlayback();
+  window.addEventListener('pointerdown', handleFirstAudioInteraction, {
+    once: true,
+  });
+  window.addEventListener('keydown', handleFirstAudioInteraction, {
+    once: true,
+  });
+}
 
 // ===================================
 // STORIES SCROLL BUTTONS

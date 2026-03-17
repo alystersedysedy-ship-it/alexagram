@@ -122,6 +122,31 @@ img {
   border: none;
   cursor: pointer;
 }
+.header__audio-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+.header__audio-button-play,
+.header__audio-button-pause {
+  display: block;
+}
+.header__audio-button-pause {
+  display: none;
+}
+.header__audio-button.is-playing .header__audio-button-play {
+  display: none;
+}
+.header__audio-button.is-playing .header__audio-button-pause {
+  display: block;
+}
+.header__audio-button.is-hidden {
+  display: none;
+}
 .header__theme-button-sun {
   display: none;
 }
