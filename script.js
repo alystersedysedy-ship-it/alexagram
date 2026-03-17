@@ -1,5 +1,4 @@
 // Elements
-const toggleThemeBtn = document.querySelector('.header__theme-button');
 const audioToggleBtn = document.querySelector('.header__audio-button');
 const siteAudio = document.querySelector('.site-audio');
 const storiesContent = document.querySelector('.stories__content');
@@ -44,31 +43,6 @@ const heartIconFilled = `
     />
   </svg>
 `;
-
-// ===================================
-// DARK/LIGHT THEME
-// Set initial theme from LocalStorage
-document.onload = setInitialTheme(localStorage.getItem('theme'));
-function setInitialTheme(themeKey) {
-  if (themeKey === 'dark') {
-    document.documentElement.classList.add('darkTheme');
-  } else {
-    document.documentElement.classList.remove('darkTheme');
-  }
-}
-
-// Toggle theme button
-toggleThemeBtn.addEventListener('click', () => {
-  // Toggle root class
-  document.documentElement.classList.toggle('darkTheme');
-
-  // Saving current theme on LocalStorage
-  if (document.documentElement.classList.contains('darkTheme')) {
-    localStorage.setItem('theme', 'dark');
-  } else {
-    localStorage.setItem('theme', 'light');
-  }
-});
 
 // ===================================
 // SITE AUDIO

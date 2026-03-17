@@ -117,11 +117,6 @@ img {
   line-height: 1;
   color: var(--text-dark);
 }
-.header__theme-button {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-}
 .header__audio-button {
   background-color: transparent;
   border: none;
@@ -147,19 +142,6 @@ img {
 .header__audio-button.is-hidden {
   display: none;
 }
-.header__theme-button-sun {
-  display: none;
-}
-.header__theme-button-moon {
-  display: unset;
-}
-:root.darkTheme .header__theme-button-sun {
-  display: unset;
-}
-:root.darkTheme .header__theme-button-moon {
-  display: none;
-}
-
 .header__search {
   width: 216px;
   height: 28px;
