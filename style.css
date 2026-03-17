@@ -56,6 +56,14 @@ body {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  opacity: 1;
+  transition: opacity 420ms ease, transform 420ms ease;
+  transform: translateY(0);
+}
+
+body.page-loading {
+  opacity: 0;
+  transform: translateY(10px);
 }
 
 svg {

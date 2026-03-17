@@ -10,6 +10,10 @@ const postsContent = document.querySelectorAll('.post__content');
 const postActionState = JSON.parse(localStorage.getItem('postActionState') || '{}');
 const STORY_SLIDE_DURATION = 6000;
 
+window.addEventListener('load', () => {
+  document.body.classList.remove('page-loading');
+});
+
 const heartIconOutline = `
   <svg
     width="24"
