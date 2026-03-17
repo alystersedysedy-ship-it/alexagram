@@ -77,9 +77,7 @@ body.page-loading > :not(.page-loader) {
   display: flex;
   align-items: center;
   justify-content: center;
-  background:
-    radial-gradient(circle at top, rgba(255, 255, 255, 0.06), transparent 36%),
-    var(--primary);
+  background: var(--primary);
   opacity: 1;
   visibility: visible;
   transition: opacity 420ms ease, visibility 420ms ease;
@@ -90,43 +88,53 @@ body.page-ready .page-loader {
   visibility: hidden;
 }
 
+.page-loader__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
 .page-loader__word {
-  width: 0;
-  overflow: hidden;
-  white-space: nowrap;
   color: var(--text-dark);
   font-family: 'Brush Script MT', 'Segoe Script', cursive;
   font-size: clamp(48px, 9vw, 82px);
   line-height: 1;
   letter-spacing: 0.02em;
-  border-right: 2px solid rgba(255, 255, 255, 0.9);
   text-shadow: 0 0 24px rgba(255, 255, 255, 0.08);
-  animation:
-    loader-type 0.9s steps(10, end) forwards,
-    loader-caret 0.7s step-end infinite;
 }
 
-body.page-ready .page-loader__word {
-  animation: none;
-  border-right-color: transparent;
+.page-loader__dots {
+  display: flex;
+  gap: 8px;
 }
 
-@keyframes loader-type {
-  from {
-    width: 0;
-  }
-  to {
-    width: 10ch;
-  }
+.page-loader__dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  animation: loader-bounce 0.9s infinite ease-in-out;
 }
 
-@keyframes loader-caret {
+.page-loader__dots span:nth-child(2) {
+  animation-delay: 0.12s;
+}
+
+.page-loader__dots span:nth-child(3) {
+  animation-delay: 0.24s;
+}
+
+@keyframes loader-bounce {
   0%,
+  80%,
   100% {
-    border-right-color: rgba(255, 255, 255, 0.9);
+    opacity: 0.35;
+    transform: translateY(0) scale(0.9);
   }
-  50% {
-    border-right-color: transparent;
+  40% {
+    opacity: 1;
+    transform: translateY(-4px) scale(1);
   }
 }
 
