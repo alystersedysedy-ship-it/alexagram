@@ -333,7 +333,16 @@ if (storyButtons.length > 0) {
   });
 
   storyViewerBackdrop.addEventListener('click', closeStoryViewer);
-  storyViewerCloseButton.addEventListener('click', closeStoryViewer);
+  storyViewerCloseButton.addEventListener('pointerdown', (event) => {
+    event.stopPropagation();
+  });
+  storyViewerCloseButton.addEventListener('pointerup', (event) => {
+    event.stopPropagation();
+  });
+  storyViewerCloseButton.addEventListener('click', (event) => {
+    event.stopPropagation();
+    closeStoryViewer();
+  });
   storyViewerNextButton.addEventListener('click', openNextStorySlide);
   storyViewerPreviousButton.addEventListener('click', openPreviousStorySlide);
 
