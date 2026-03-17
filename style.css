@@ -472,7 +472,7 @@ body.story-viewer-open {
   transform: scaleX(1);
 }
 .story-viewer__progress-item.is-active span {
-  animation: story-progress 3200ms linear forwards;
+  animation: story-progress 6000ms linear forwards;
 }
 .story-viewer.is-paused .story-viewer__progress-item.is-active span {
   animation-play-state: paused;
