@@ -178,6 +178,7 @@ if (storyButtons.length > 0) {
   const storyViewerAvatar = storyViewer.querySelector('.story-viewer__avatar img');
   const storyViewerUser = storyViewer.querySelector('.story-viewer__user');
   const storyViewerImage = storyViewer.querySelector('.story-viewer__image');
+  const storyViewerPanel = storyViewer.querySelector('.story-viewer__panel');
   const storyViewerCloseButton = storyViewer.querySelector('.story-viewer__close');
   const storyViewerPreviousButton = storyViewer.querySelector('.story-viewer__nav--left');
   const storyViewerNextButton = storyViewer.querySelector('.story-viewer__nav--right');
@@ -185,6 +186,9 @@ if (storyButtons.length > 0) {
   let activeStoryIndex = 0;
   let activeSlideIndex = 0;
   let storyTimeout = null;
+  let swipeStartX = null;
+  let swipeStartY = null;
+  const STORY_SWIPE_THRESHOLD = 45;
 
   function isStoryViewerOpen() {
     return storyViewer.classList.contains('is-open');
@@ -306,6 +310,49 @@ if (storyButtons.length > 0) {
   storyViewerCloseButton.addEventListener('click', closeStoryViewer);
   storyViewerNextButton.addEventListener('click', openNextStorySlide);
   storyViewerPreviousButton.addEventListener('click', openPreviousStorySlide);
+
+  storyViewerPanel.addEventListener(
+    'touchstart',
+    (event) => {
+      const touch = event.touches[0];
+      if (!touch) return;
+      swipeStartX = touch.clientX;
+      swipeStartY = touch.clientY;
+      clearStoryTimeout();
+    },
+    { passive: true }
+  );
+
+  storyViewerPanel.addEventListener(
+    'touchend',
+    (event) => {
+      const touch = event.changedTouches[0];
+      if (!touch || swipeStartX === null || swipeStartY === null) {
+        scheduleStoryAdvance();
+        swipeStartX = null;
+        swipeStartY = null;
+        return;
+      }
+
+      const deltaX = touch.clientX - swipeStartX;
+      const deltaY = touch.clientY - swipeStartY;
+      const isHorizontalSwipe = Math.abs(deltaX) > Math.abs(deltaY);
+
+      if (isHorizontalSwipe && Math.abs(deltaX) >= STORY_SWIPE_THRESHOLD) {
+        if (deltaX < 0) {
+          openNextStorySlide();
+        } else {
+          openPreviousStorySlide();
+        }
+      } else {
+        scheduleStoryAdvance();
+      }
+
+      swipeStartX = null;
+      swipeStartY = null;
+    },
+    { passive: true }
+  );
 
   document.addEventListener('keydown', (event) => {
     if (!isStoryViewerOpen()) return;
