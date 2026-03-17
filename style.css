@@ -267,22 +267,6 @@ img {
   position: relative;
   overflow: visible;
 }
-.stories--highlight {
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 14px;
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
-    0 0 26px rgba(255, 77, 136, 0.16);
-}
-.stories--highlight::before {
-  content: '';
-  position: absolute;
-  inset: -6px;
-  border: 1px solid rgba(255, 115, 166, 0.46);
-  border-radius: 18px;
-  pointer-events: none;
-  animation: stories-highlight-pulse 1.8s ease-in-out infinite;
-}
 .stories::after {
   content: '';
   position: absolute;
@@ -325,17 +309,6 @@ img {
 }
 .stories__content::-webkit-scrollbar {
   display: none;
-}
-@keyframes stories-highlight-pulse {
-  0%,
-  100% {
-    opacity: 0.45;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.01);
-  }
 }
 
 .posts {
