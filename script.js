@@ -11,7 +11,10 @@ const postActionState = JSON.parse(localStorage.getItem('postActionState') || '{
 const STORY_SLIDE_DURATION = 6000;
 
 window.addEventListener('load', () => {
-  document.body.classList.remove('page-loading');
+  window.setTimeout(() => {
+    document.body.classList.add('page-ready');
+    document.body.classList.remove('page-loading');
+  }, 1500);
 });
 
 const heartIconOutline = `

@@ -66,6 +66,66 @@ body.page-loading {
   transform: translateY(10px);
 }
 
+.page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.06), transparent 36%),
+    var(--primary);
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 420ms ease, visibility 420ms ease;
+}
+
+body.page-ready .page-loader {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.page-loader__word {
+  width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  color: var(--text-dark);
+  font-family: 'Brush Script MT', 'Segoe Script', cursive;
+  font-size: clamp(48px, 9vw, 82px);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  border-right: 2px solid rgba(255, 255, 255, 0.9);
+  text-shadow: 0 0 24px rgba(255, 255, 255, 0.08);
+  animation:
+    loader-type 1.5s steps(10, end) forwards,
+    loader-caret 0.7s step-end infinite;
+}
+
+body.page-ready .page-loader__word {
+  animation: none;
+  border-right-color: transparent;
+}
+
+@keyframes loader-type {
+  from {
+    width: 0;
+  }
+  to {
+    width: 10ch;
+  }
+}
+
+@keyframes loader-caret {
+  0%,
+  100% {
+    border-right-color: rgba(255, 255, 255, 0.9);
+  }
+  50% {
+    border-right-color: transparent;
+  }
+}
+
 svg {
   display: block;
 }
