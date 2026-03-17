@@ -277,14 +277,17 @@ img {
   background-color: var(--border);
 }
 .stories__prompt {
-  position: relative;
+  position: sticky;
+  top: calc(var(--header-height) + 6px);
   z-index: 3;
   display: flex;
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
   pointer-events: none;
-  margin: 0 16px 12px;
+  margin: 0;
+  padding: 4px 16px 12px;
+  background-color: var(--primary);
 }
 .stories__prompt-badge {
   display: none !important;
@@ -1170,6 +1173,14 @@ body.story-viewer-open {
 
   .navbar {
     display: none;
+  }
+
+  .stories__prompt {
+    position: relative;
+    top: auto;
+    margin: 0 16px 12px;
+    padding: 0;
+    background-color: transparent;
   }
 }
 
