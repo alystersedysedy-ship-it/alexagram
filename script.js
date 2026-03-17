@@ -188,10 +188,10 @@ if (storyButtons.length > 0) {
   let storyTimeout = null;
   let storyAdvanceStartedAt = 0;
   let storyAdvanceRemaining = STORY_SLIDE_DURATION;
-  let swipeStartX = null;
-  let swipeStartY = null;
-  let swipeStartedAt = 0;
-  let suppressStoryTap = false;
+  let pointerStartX = null;
+  let pointerStartY = null;
+  let pointerStartedAt = 0;
+  let activePointerId = null;
   const STORY_SWIPE_THRESHOLD = 45;
   const STORY_HOLD_THRESHOLD = 220;
   const STORY_TAP_DRIFT_THRESHOLD = 12;
@@ -334,50 +334,39 @@ if (storyButtons.length > 0) {
 
   storyViewerBackdrop.addEventListener('click', closeStoryViewer);
   storyViewerCloseButton.addEventListener('click', closeStoryViewer);
-  storyViewerNextButton.addEventListener('click', (event) => {
-    if (suppressStoryTap) {
-      event.preventDefault();
-      suppressStoryTap = false;
-      return;
-    }
-    openNextStorySlide();
-  });
-  storyViewerPreviousButton.addEventListener('click', (event) => {
-    if (suppressStoryTap) {
-      event.preventDefault();
-      suppressStoryTap = false;
-      return;
-    }
-    openPreviousStorySlide();
-  });
+  storyViewerNextButton.addEventListener('click', openNextStorySlide);
+  storyViewerPreviousButton.addEventListener('click', openPreviousStorySlide);
 
-  function handleStoryTouchStart(event) {
-    const touch = event.touches[0];
-    if (!touch) return;
-    event.preventDefault();
-    swipeStartX = touch.clientX;
-    swipeStartY = touch.clientY;
-    swipeStartedAt = Date.now();
-    suppressStoryTap = false;
+  function handleStoryPointerDown(event) {
+    if (event.target.closest('.story-viewer__close')) return;
+    if (event.pointerType === 'mouse' && event.button !== 0) return;
+    activePointerId = event.pointerId;
+    pointerStartX = event.clientX;
+    pointerStartY = event.clientY;
+    pointerStartedAt = Date.now();
     pauseStoryPlayback();
   }
 
-  function handleStoryTouchEnd(event) {
-    const touch = event.changedTouches[0];
-    if (!touch || swipeStartX === null || swipeStartY === null) {
+  function resetStoryPointerState() {
+    activePointerId = null;
+    pointerStartX = null;
+    pointerStartY = null;
+    pointerStartedAt = 0;
+  }
+
+  function handleStoryPointerUp(event) {
+    if (event.target.closest('.story-viewer__close')) return;
+    if (activePointerId !== event.pointerId) return;
+    if (pointerStartX === null || pointerStartY === null) {
       resumeStoryPlayback();
-      swipeStartX = null;
-      swipeStartY = null;
-      swipeStartedAt = 0;
+      resetStoryPointerState();
       return;
     }
 
-    event.preventDefault();
-
-    const deltaX = touch.clientX - swipeStartX;
-    const deltaY = touch.clientY - swipeStartY;
+    const deltaX = event.clientX - pointerStartX;
+    const deltaY = event.clientY - pointerStartY;
     const isHorizontalSwipe = Math.abs(deltaX) > Math.abs(deltaY);
-    const holdDuration = Date.now() - swipeStartedAt;
+    const holdDuration = Date.now() - pointerStartedAt;
     const isTapLike =
       Math.abs(deltaX) <= STORY_TAP_DRIFT_THRESHOLD &&
       Math.abs(deltaY) <= STORY_TAP_DRIFT_THRESHOLD;
@@ -391,36 +380,34 @@ if (storyButtons.length > 0) {
       suppressStoryTap = true;
     } else if (holdDuration >= STORY_HOLD_THRESHOLD) {
       resumeStoryPlayback();
-      suppressStoryTap = true;
     } else if (isTapLike) {
       const panelBounds = storyViewerPanel.getBoundingClientRect();
       const tappedLeftSide =
-        touch.clientX < panelBounds.left + panelBounds.width / 2;
+        event.clientX < panelBounds.left + panelBounds.width / 2;
 
       if (tappedLeftSide) {
         openPreviousStorySlide();
       } else {
         openNextStorySlide();
       }
-      suppressStoryTap = true;
     } else {
       resumeStoryPlayback();
     }
 
-    swipeStartX = null;
-    swipeStartY = null;
-    swipeStartedAt = 0;
+    resetStoryPointerState();
   }
 
-  storyViewerPanel.addEventListener('touchstart', handleStoryTouchStart, {
-    passive: false,
-  });
-  storyViewerPanel.addEventListener('touchend', handleStoryTouchEnd, {
-    passive: false,
-  });
-  storyViewerPanel.addEventListener('mousedown', pauseStoryPlayback);
-  storyViewerPanel.addEventListener('mouseup', resumeStoryPlayback);
-  storyViewerPanel.addEventListener('mouseleave', resumeStoryPlayback);
+  function handleStoryPointerCancel(event) {
+    if (event.target.closest('.story-viewer__close')) return;
+    if (activePointerId !== event.pointerId) return;
+    resumeStoryPlayback();
+    resetStoryPointerState();
+  }
+
+  storyViewerPanel.addEventListener('pointerdown', handleStoryPointerDown);
+  storyViewerPanel.addEventListener('pointerup', handleStoryPointerUp);
+  storyViewerPanel.addEventListener('pointercancel', handleStoryPointerCancel);
+  storyViewerPanel.addEventListener('lostpointercapture', handleStoryPointerCancel);
 
   storyViewer.addEventListener('contextmenu', (event) => {
     if (!isStoryViewerOpen()) return;
