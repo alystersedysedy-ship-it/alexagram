@@ -180,28 +180,28 @@ if (storyButtons.length > 0) {
 
   const storyFolderMediaMap = {
     AS: ['img/AS/AS 1.webp', 'img/AS/AS 2.webp', 'img/AS/AS 3.webp'],
-    LONG: ['img/LONG/LONG 1.png', 'img/LONG/LONG 2.png', 'img/LONG/LONG 3.png'],
+    LONG: ['img/LONG/LONG 1.webp', 'img/LONG/LONG 2.webp', 'img/LONG/LONG 3.webp'],
     'AS 2': [
-      'img/AS 2/AS 2 1.png',
-      'img/AS 2/AS 2 2.png',
-      'img/AS 2/AS 2 3.png',
+      'img/AS 2/AS 2 1.webp',
+      'img/AS 2/AS 2 2.webp',
+      'img/AS 2/AS 2 3.webp',
     ],
-    I: ['img/I/i 1.png', 'img/I/i 2.png', 'img/I/i 3.png'],
+    I: ['img/I/i 1.webp', 'img/I/i 2.webp', 'img/I/i 3.webp'],
     EXIST: [
-      'img/EXIST/EXIST 1.png',
-      'img/EXIST/EXIST 2.png',
-      'img/EXIST/EXIST 3.png',
+      'img/EXIST/EXIST 1.webp',
+      'img/EXIST/EXIST 2.webp',
+      'img/EXIST/EXIST 3.webp',
     ],
     "YOU'LL": [
-      "img/YOU'LL/YOU'LL 1.png",
-      "img/YOU'LL/YOU'LL 2.png",
-      "img/YOU'LL/YOU'LL 3.png",
+      "img/YOU'LL/YOU'LL 1.webp",
+      "img/YOU'LL/YOU'LL 2.webp",
+      "img/YOU'LL/YOU'LL 3.webp",
     ],
-    BE: ['img/BE/BE 1.png', 'img/BE/BE 2.png', 'img/BE/BE 3.png'],
+    BE: ['img/BE/BE 1.webp', 'img/BE/BE 2.webp', 'img/BE/BE 3.webp'],
     LOVED: [
-      'img/LOVED/LOVED 1.png',
-      'img/LOVED/LOVED 2.png',
-      'img/LOVED/LOVED 3.png',
+      'img/LOVED/LOVED 1.webp',
+      'img/LOVED/LOVED 2.webp',
+      'img/LOVED/LOVED 3.webp',
     ],
   };
 
