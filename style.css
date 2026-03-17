@@ -302,6 +302,9 @@ img {
   pointer-events: none;
   margin: 0 16px 12px;
 }
+.stories__prompt-badge {
+  display: none !important;
+}
 .stories__prompt-text {
   color: var(--text-light);
   font-size: 12px;
